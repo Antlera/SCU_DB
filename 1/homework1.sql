@@ -221,6 +221,38 @@ FROM divide_bucket
 WHERE bucket_number = 1;
 
 
+--Q8 [15 POINTS] (Q9_YOUNGBLOOD):
+--Find the youngest employee serving each Region. If a Region is not served by an 
+--employee, ignore it.
+--Details: Print the Region Description, First Name, Last Name, and Birth Date. 
+--Order by Region Id.
+--Your first row should look like Eastern|Steven|Buchanan|1987-03-04
+WITH employee_info AS
+(
+SELECT
+	FirstName ,
+	LastName ,
+	MIN(BirthDate) MinBirthDate,
+	Id eId
+FROM
+	Employee e
+GROUP BY
+	Region
+ORDER BY
+	Region ),
+territory_info AS 
+(
+	SELECT * FROM EmployeeTerritory et  JOIN Territory t ON et.TerritoryId  = t.Id JOIN Employee e ON e.Id = et.EmployeeId 
+)
+SELECT
+	DISTINCT RegionDescription,ei.FirstName ,ei.LastName,MinBirthDate
+FROM
+	territory_info ti
+JOIN employee_info ei ON
+	ei.eId = ti.EmployeeId
+JOIN Region r ON ti.RegionId = r.Id ;
+
+
 
 
 
@@ -233,6 +265,7 @@ SELECT * FROM Category c ;
 SELECT * FROM Supplier s2 ;
 SELECT * FROM Shipper s ;
 SELECT * FROM Territory t ;
+SELECT * FROM EmployeeTerritory et ;
 SELECT * FROM Customer c ;
 SELECT * FROM CustomerCustomerDemo  cd ;
 SELECT * FROM Product p ;
