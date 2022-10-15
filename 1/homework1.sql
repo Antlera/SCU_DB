@@ -114,10 +114,10 @@ SELECT
 FROM
 	(
 	SELECT
-		CustomerId || 'N' AS "CusId",
+		CustomerId,
 		ProductId,
 		ProductName,
-		COUNT(*) OrderTimes
+		MIN(OrderDate)
 	FROM
 		OrderDetail od
 	JOIN Product p ON
@@ -127,15 +127,11 @@ FROM
 	WHERE
 		p.Discontinued = 1
 	GROUP BY
-		ProductId,
-		CustomerId
-	HAVING
-		OrderTimes = 1 ) t1
+		ProductId ) t1
 JOIN Customer c 
 ON
-	t1.CusId = c.Id 
+	t1.CustomerId = c.Id 
 ORDER BY ProductName;
-
 
 --Q6 [10 POINTS] (Q6_ORDER_LAGS):
 --For the first 10 orders by CutomerId BLONP: get the Order's Id, OrderDate, 
@@ -178,14 +174,55 @@ LIMIT 10);
 --You should still consider these "Customers" and output them. If 
 --the CompanyName is missing, override the NULL to 'MISSING_NAME' using IFNULL.
 
-SELECT CompanyName FROM
-	
-	(SELECT DISTINCT CustomerId FROM OrderDetail od
-	JOIN Product p ON
-		p.Id = od.ProductId
-	JOIN "Order" o ON
-		o.Id = od.OrderId) t1 JOIN Customer c ON t1.CustomId = c.Id 
-	ORDER BY CustomerId;
+
+--SELECT
+--	CustomerId,
+--	CompanyName,
+--	ROUND(SUM((Quantity / QuantityPerUnit * UnitPrice)),2) "-"
+--FROM
+--	(
+--	SELECT
+--		CustomerId,
+--		Quantity,
+--		p.UnitPrice,
+--		SUBSTRING(QuantityPerUnit, 0, INSTR(QuantityPerUnit, " ")) AS "QuantityPerUnit",
+--		QuantityPerUnit QPU
+--	FROM
+--		OrderDetail od
+--	JOIN Product p ON
+--		p.Id = od.ProductId
+--	JOIN "Order" o ON
+--		o.Id = od.OrderId
+--	WHERE CustomerId = "BONAP") t1
+--JOIN Customer c 
+--ON
+--	t1.CustomerId = c.Id
+--GROUP BY 
+--	CustomerId 
+--ORDER BY 
+--	"-";
+
+WITH total_cost AS (
+	SELECT 
+		IFNULL(CompanyName, "MISSING_NAME") AS "CompanyName",
+		CustomerId, 
+		ROUND(SUM(UnitPrice * Quantity), 2) AS "TotalExpenditures"
+	FROM 'Order' o
+	INNER JOIN OrderDetail od ON o.Id = od.OrderId
+	LEFT JOIN Customer AS c ON o.CustomerId = c.Id
+	GROUP BY o.CustomerId
+),
+divide_bucket AS (
+	SELECT *, NTILE(4) OVER(ORDER BY TotalExpenditures ASC) AS bucket_number
+	FROM total_cost
+)
+SELECT CompanyName, CustomerId, TotalExpenditures
+FROM divide_bucket
+WHERE bucket_number = 1;
+
+
+
+
 
 
 SELECT COUNT(*) total FROM "Order" o JOIN Shipper s ON o.ShipVia = s.Id  GROUP BY s.Id T
@@ -201,6 +238,7 @@ SELECT * FROM CustomerCustomerDemo  cd ;
 SELECT * FROM Product p ;
 SELECT * FROM Region r ;
 SELECT * FROM "Order" o GROUP BY CustomerId ORDER BY CustomerId ;
+
 
 
 
