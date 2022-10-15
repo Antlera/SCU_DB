@@ -166,7 +166,26 @@ ORDER BY
 LIMIT 10);
 
 
+--Q7 [15 POINTS] (Q7_TOTAL_COST_QUARTILES):
+--For each Customer, get the CompanyName, CustomerId, and "total expenditures". 
+--Output the bottom quartile of Customers, as measured by total expenditures.
+--Details: Calculate expenditure using UnitPrice and Quantity (ignore Discount). 
+--Compute the quartiles for each company's total expenditures using NTILE. The 
+--bottom quartile is the 1st quartile, order them by increasing expenditure.
+--Make sure your output is formatted as follows (round expenditure to nearest 
+--hundredths): Bon app|BONAP|4485708.49
+--Note: There are orders for CustomerIds that don't appear in the Customer table. 
+--You should still consider these "Customers" and output them. If 
+--the CompanyName is missing, override the NULL to 'MISSING_NAME' using IFNULL.
 
+SELECT CompanyName FROM
+	
+	(SELECT DISTINCT CustomerId FROM OrderDetail od
+	JOIN Product p ON
+		p.Id = od.ProductId
+	JOIN "Order" o ON
+		o.Id = od.OrderId) t1 JOIN Customer c ON t1.CustomId = c.Id 
+	ORDER BY CustomerId;
 
 
 SELECT COUNT(*) total FROM "Order" o JOIN Shipper s ON o.ShipVia = s.Id  GROUP BY s.Id T
