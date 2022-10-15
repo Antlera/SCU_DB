@@ -78,18 +78,37 @@ FROM
 	GROUP BY
 		s.Id) t2
 	WHERE t1.CompanyName = t2.CompanyName
-	ORDER BY LateRate DESC;
+	ORDER BY DelayPercent DESC;
+
+--Q4 Compute some statistics about categories of products
+--Details: Get the number of products, average unit price (rounded to 2 decimal 
+--places), minimum unit price, maximum unit price, and total units on order for 
+--categories containing greater than 10 products.
+--Order by Category Id. Your output should look like Beverages|12|37.98|4.5|263.5|60
+SELECT
+	CategoryName,
+	COUNT(*) ProductNumber,
+	ROUND(AVG(UnitPrice),2) AvgUnitPrice,
+	MIN(UnitPrice) MinUnitPrice,
+	MAX(UnitPrice) MaxUnitPrice,
+	SUM(UnitsOnOrder) UnitsOnOrderSum
+FROM
+	Category c
+JOIN Product p ON
+	c.Id = p.CategoryId
+GROUP BY
+	p.CategoryId
+HAVING ProductNumber > 10
+ORDER BY CategoryId;
 
 
 
 
 
-
-JOIN 
 SELECT COUNT(*) total FROM "Order" o JOIN Shipper s ON o.ShipVia = s.Id  GROUP BY s.Id T
 ON LC.Id = T.Id;
 SELECT * FROM OrderDetail od ;
-SELECT * FROM Employee e ;''
+SELECT * FROM Employee e ;
 SELECT * FROM Category c ;
 SELECT * FROM Supplier s2 ;
 SELECT * FROM Shipper s ;
