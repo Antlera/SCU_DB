@@ -101,6 +101,40 @@ GROUP BY
 HAVING ProductNumber > 10
 ORDER BY CategoryId;
 
+--Q5 [10 POINTS] (Q5_DISCONTINUED):
+--For each of the 8 discontinued products in the database, which customer made the 
+--first ever order for the product? Output the 
+--customer's CompanyName and ContactName
+--Details: Print the following format, order by ProductName alphabetically: Alice
+--Mutton|Consolidated Holdings|Elizabeth Brown
+SELECT
+	ProductName,
+	CompanyName,
+	ContactName
+FROM
+	(
+	SELECT
+		CustomerId || 'N' AS "CusId",
+		ProductId,
+		ProductName,
+		COUNT(*) OrderTimes
+	FROM
+		OrderDetail od
+	JOIN Product p ON
+		p.Id = od.ProductId
+	JOIN "Order" o ON
+		o.Id = od.OrderId
+	WHERE
+		p.Discontinued = 1
+	GROUP BY
+		ProductId,
+		CustomerId
+	HAVING
+		OrderTimes = 1 ) t1
+JOIN Customer c 
+ON
+	t1.CusId = c.Id 
+ORDER BY ProductName;
 
 
 
@@ -117,6 +151,7 @@ SELECT * FROM Customer c ;
 SELECT * FROM CustomerCustomerDemo  cd ;
 SELECT * FROM Product p ;
 SELECT * FROM Region r ;
+SELECT * FROM "Order" o GROUP BY CustomerId ORDER BY CustomerId ;
 
 
 
