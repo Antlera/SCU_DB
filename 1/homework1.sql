@@ -221,7 +221,7 @@ FROM divide_bucket
 WHERE bucket_number = 1;
 
 
---Q8 [15 POINTS] (Q9_YOUNGBLOOD):
+--Q8 [15 POINTS] (Q8_YOUNGBLOOD):
 --Find the youngest employee serving each Region. If a Region is not served by an 
 --employee, ignore it.
 --Details: Print the Region Description, First Name, Last Name, and Birth Date. 
@@ -252,6 +252,46 @@ JOIN employee_info ei ON
 	ei.eId = ti.EmployeeId
 JOIN Region r ON ti.RegionId = r.Id ;
 
+
+--Q9 [15 POINTS] (Q9_CHRISTMAS):
+--Concatenate the ProductNames ordered by the Company 'Queen
+--Cozinha' on 2014-12-25.
+--Details: Order the products by Id (ascending). Print a single string
+--containing all the dup names separated by commas like Mishi Kobe
+--Niku, NuNuCa Nuß-Nougat-Creme...
+--Hint: You might find Recursive CTEs useful.
+WITH OrderFullTable AS (
+SELECT
+	*
+FROM
+	OrderDetail od
+JOIN "Order" o ON
+	od.OrderId = o.Id
+JOIN Product p ON
+	od.ProductId = p.Id),
+QueenOrder AS (
+SELECT
+	*
+FROM
+	OrderFulltable oft
+JOIN Customer c ON
+	oft.CustomerId = c.Id
+WHERE
+	c.CompanyName = "Queen Cozinha"
+	AND oft.OrderDate LIKE "2014-12-25%"),
+OrderedProductName AS
+(
+SELECT
+	ProductName
+FROM
+	QueenOrder
+ORDER BY
+	ProductId ASC
+)
+SELECT
+	GROUP_CONCAT(ProductName) ProductNameCatString
+FROM
+	OrderedProductName;
 
 
 
