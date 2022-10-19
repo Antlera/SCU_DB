@@ -25,6 +25,7 @@ Result:
 
 
 
+
 ```sql
 --Q2 Indicate if an order's ShipCountry is in North America. For our purposes, this 
 --is 'USA', 'Mexico', 'Canada'
@@ -63,6 +64,7 @@ ORDER BY
 	Id ASC
 LIMIT 20;
 ```
+Result:
 ![Q2_img](1/Q2.png "Q2_result")
 
 ```sql
@@ -98,7 +100,12 @@ FROM
 	WHERE t1.CompanyName = t2.CompanyName
 	ORDER BY DelayPercent DESC;
 ```
+Result:
 ![Q3_img](1/Q3.png "Q3_result")
+
+
+
+
 
 ```sql
 --Q4 Compute some statistics about categories of products
@@ -122,6 +129,7 @@ GROUP BY
 HAVING ProductNumber > 10
 ORDER BY CategoryId;
 ```
+Result:
 ![Q4_img](1/Q4.png "Q4_result")
 
 ```sql
@@ -157,7 +165,12 @@ ON
 	t1.CustomerId = c.Id 
 ORDER BY ProductName;
 ```
+Result:
 ![Q5_img](1/Q5.png "Q5_result")
+
+
+
+
 
 ```sql
 --Q6 [10 POINTS] (Q6_ORDER_LAGS):
@@ -188,7 +201,12 @@ ORDER BY
 	OrderDate ASC
 LIMIT 10);
 ```
+Result:
 ![Q6_img](1/Q6.png "Q6_result")
+
+
+
+
 
 ```sql
 --Q7 [15 POINTS] (Q7_TOTAL_COST_QUARTILES):
@@ -221,7 +239,12 @@ SELECT CompanyName, CustomerId, TotalExpenditures
 FROM divide_bucket
 WHERE bucket_number = 1;
 ```
+Result:
 ![Q7_img](1/Q7.png "Q7_result")
+
+
+
+
 
 ```sql
 --Q8 [15 POINTS] (Q8_YOUNGBLOOD):
@@ -255,7 +278,12 @@ JOIN employee_info ei ON
 	ei.eId = ti.EmployeeId
 JOIN Region r ON ti.RegionId = r.Id ;
 ```
+Result:
 ![Q8_img](1/Q8.png "Q8_result")
+
+
+
+
 
 ```sql
 --Q9 [15 POINTS] (Q9_CHRISTMAS):
@@ -298,6 +326,7 @@ SELECT
 FROM
 	OrderedProductName;
 ```
+Result:
 ![Q9_img](1/Q9.png "Q9_result")
 
 
