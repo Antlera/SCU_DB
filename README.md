@@ -1,4 +1,4 @@
-# SCU_DB
+# SCU_DB BY LanTingFeng
 
 ## Homework1
 
