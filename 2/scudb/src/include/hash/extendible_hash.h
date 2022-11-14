@@ -15,13 +15,22 @@
 
 #include "hash/hash_table.h"
 
+
 namespace scudb {
 
 template <typename K, typename V>
 class ExtendibleHash : public HashTable<K, V> {
 public:
+  struct Bucket
+  {
+    Bucket(int depth) : localDepth(depth){};
+    int localDepth;
+    map<K, V> hashmap;    
+  };
+  
   // constructor
   ExtendibleHash(size_t size);
+  ExtendibleHash();
   // helper function to generate hash addressing
   size_t HashKey(const K &key);
   // helper function to get global & local depth
@@ -35,5 +44,6 @@ public:
 
 private:
   // add your own member variables here
+  int globalDepth;
 };
 } // namespace scudb
