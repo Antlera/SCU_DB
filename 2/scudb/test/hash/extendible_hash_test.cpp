@@ -9,6 +9,15 @@
 
 namespace scudb {
 
+TEST(ExtendibleHashTest, MyTest){
+    ExtendibleHash<int, std::string> *test =
+    new ExtendibleHash<int, std::string>(2);
+    std::cout << "hash of 5  "<< test->HashKey(5) << std::endl;
+    std::cout << "hash of 16464  " << test->HashKey(16464) << std::endl;
+    std::cout << "hash of 1784  " << test->HashKey(1784) << std::endl;
+}
+
+
 TEST(ExtendibleHashTest, SampleTest) {
   // set leaf size as 2
   ExtendibleHash<int, std::string> *test =
