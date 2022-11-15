@@ -71,6 +71,12 @@ int ExtendibleHash<K, V>::GetNumBuckets() const {
  */
 template <typename K, typename V>
 bool ExtendibleHash<K, V>::Find(const K &key, V &value) {
+  int bIndex = getBucketIndex(key);
+  if(buckets[bIndex]->hashMap.find(key) != buckets[bIndex]->hashMap.end())
+  {
+    value = buckets[bIndex]->hashMap[key];
+    return true;
+  }
   return false;
 }
 
