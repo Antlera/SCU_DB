@@ -12,7 +12,8 @@
 #include <cstdlib>
 #include <vector>
 #include <string>
-
+#include <map>
+#include <memory>
 #include "hash/hash_table.h"
 
 
@@ -25,14 +26,16 @@ public:
   {
     Bucket(int depth) : localDepth(depth){};
     int localDepth;
-    map<K, V> hashmap;    
+    std::map<K, V> hashMap;// 即实际的hash表项，在扩容复制时，仍然指向同一个hash表项，因此可以直接复制，直至下一次达到数量限制则会重新扩容，调整两桶的hash表项
   };
   
   // constructor
   ExtendibleHash(size_t size);
   ExtendibleHash();
   // helper function to generate hash addressing
-  size_t HashKey(const K &key);
+  size_t HashKey(const K &key) const;
+  // helper function to get low bits of global depth to be the bucket index which the item should be insert.
+  int getBucketIndex(const K &key) const;
   // helper function to get global & local depth
   int GetGlobalDepth() const;
   int GetLocalDepth(int bucket_id) const;
@@ -44,6 +47,9 @@ public:
 
 private:
   // add your own member variables here
-  int globalDepth;
+  std::vector<std::shared_ptr<Bucket>> buckets;
+  int globalDepth;  //  the length of low bits that the ex-hashtable cares about
+  size_t bucketFixedSize;  // the max amount of items one bucket can contain
+  int bucketNum; // counts of buckets
 };
 } // namespace scudb
