@@ -1,30 +1,29 @@
 # SCU_DB BY LanTingFeng
 
-## Homework1
-
 <span><img src="https://img.shields.io/badge/-SCU-red?logo=github"></span>
 <span><img src="https://img.shields.io/badge/Database-Sqlite-blue?logo=sqlite"><span>
 <span><img src="https://img.shields.io/badge/Version-v0.0.1-green?logo=git"><span>
----
+<details>
+<summary>Homework1 details</summary>
+<h2>Homework1</h2>
+
 ```sql
 --Q1 Get all unique ShipNames from the Order table that contain a hyphen '-'.
 --Details: In addition, get all the characters preceding the (first) hyphen. Return ship 
 --names alphabetically. Your first row should look like Bottom-Dollar Markets|Bottom
 SELECT
-	DISTINCT ShipName,
-	SUBSTRING(ShipName, 0, INSTR(shipname, "-"))
+ DISTINCT ShipName,
+ SUBSTRING(ShipName, 0, INSTR(shipname, "-"))
 FROM
-	"Order" o
+ "Order" o
 WHERE
-	ShipName LIKE "%-%"
+ ShipName LIKE "%-%"
 ORDER BY
-	ShipName ;
+ ShipName ;
 ```
+
 Result:
 ![Q1_img](./1/Q1.png "Q1_result")
-
-
-
 
 ```sql
 --Q2 Indicate if an order's ShipCountry is in North America. For our purposes, this 
@@ -36,34 +35,35 @@ Result:
 --like 15445|France|OtherPlace or 15454|Canada|NorthAmerica
 
 SELECT
-	*
+ *
 FROM
-	(
-	SELECT
-		DISTINCT Id ,
-		ShipCountry,
-		"NorthAmerica" AS "InNorthAmerica"
-	FROM
-		"Order" o
-	WHERE
-		ShipCountry IN ("USA", "Mexico", "Canada")
-		AND 
-		Id >= 15445
+ (
+ SELECT
+  DISTINCT Id ,
+  ShipCountry,
+  "NorthAmerica" AS "InNorthAmerica"
+ FROM
+  "Order" o
+ WHERE
+  ShipCountry IN ("USA", "Mexico", "Canada")
+  AND 
+  Id >= 15445
 UNION
-	SELECT
-		DISTINCT Id ,
-		ShipCountry,
-		"OtherPlace" AS "InNorthAmerica"
-	FROM
-		"Order" o
-	WHERE
-		ShipCountry NOT IN ("USA", "Mexico", "Canada")
-		AND 
-		Id >= 15445)
+ SELECT
+  DISTINCT Id ,
+  ShipCountry,
+  "OtherPlace" AS "InNorthAmerica"
+ FROM
+  "Order" o
+ WHERE
+  ShipCountry NOT IN ("USA", "Mexico", "Canada")
+  AND 
+  Id >= 15445)
 ORDER BY
-	Id ASC
+ Id ASC
 LIMIT 20;
 ```
+
 Result:
 ![Q2_img](1/Q2.png "Q2_result")
 
@@ -73,39 +73,36 @@ Result:
 --following format, order by descending precentage, rounded to the nearest 
 --hundredths, like United Package|23.44
 SELECT
-	t1.CompanyName,ROUND((late + 0.0) / (total + 0.0),4) * 100 AS "DelayPercent"
+ t1.CompanyName,ROUND((late + 0.0) / (total + 0.0),4) * 100 AS "DelayPercent"
 FROM
-	(
-	SELECT
-		COUNT(*) late,
-		CompanyName
-	FROM
-		"Order" o
-	JOIN Shipper s ON
-		o.ShipVia = s.Id
-	WHERE
-		o.ShippedDate > o.RequiredDate
-	GROUP BY
-		s.Id) t1,
-	(
-	SELECT
-		COUNT(*) total,
-		CompanyName
-	FROM
-		"Order" o
-	JOIN Shipper s ON
-		o.ShipVia = s.Id
-	GROUP BY
-		s.Id) t2
-	WHERE t1.CompanyName = t2.CompanyName
-	ORDER BY DelayPercent DESC;
+ (
+ SELECT
+  COUNT(*) late,
+  CompanyName
+ FROM
+  "Order" o
+ JOIN Shipper s ON
+  o.ShipVia = s.Id
+ WHERE
+  o.ShippedDate > o.RequiredDate
+ GROUP BY
+  s.Id) t1,
+ (
+ SELECT
+  COUNT(*) total,
+  CompanyName
+ FROM
+  "Order" o
+ JOIN Shipper s ON
+  o.ShipVia = s.Id
+ GROUP BY
+  s.Id) t2
+ WHERE t1.CompanyName = t2.CompanyName
+ ORDER BY DelayPercent DESC;
 ```
+
 Result:
 ![Q3_img](1/Q3.png "Q3_result")
-
-
-
-
 
 ```sql
 --Q4 Compute some statistics about categories of products
@@ -114,21 +111,22 @@ Result:
 --categories containing greater than 10 products.
 --Order by Category Id. Your output should look like Beverages|12|37.98|4.5|263.5|60
 SELECT
-	CategoryName,
-	COUNT(*) ProductNumber,
-	ROUND(AVG(UnitPrice),2) AvgUnitPrice,
-	MIN(UnitPrice) MinUnitPrice,
-	MAX(UnitPrice) MaxUnitPrice,
-	SUM(UnitsOnOrder) UnitsOnOrderSum
+ CategoryName,
+ COUNT(*) ProductNumber,
+ ROUND(AVG(UnitPrice),2) AvgUnitPrice,
+ MIN(UnitPrice) MinUnitPrice,
+ MAX(UnitPrice) MaxUnitPrice,
+ SUM(UnitsOnOrder) UnitsOnOrderSum
 FROM
-	Category c
+ Category c
 JOIN Product p ON
-	c.Id = p.CategoryId
+ c.Id = p.CategoryId
 GROUP BY
-	p.CategoryId
+ p.CategoryId
 HAVING ProductNumber > 10
 ORDER BY CategoryId;
 ```
+
 Result:
 ![Q4_img](1/Q4.png "Q4_result")
 
@@ -140,37 +138,34 @@ Result:
 --Details: Print the following format, order by ProductName alphabetically: Alice
 --Mutton|Consolidated Holdings|Elizabeth Brown
 SELECT
-	ProductName,
-	CompanyName,
-	ContactName
+ ProductName,
+ CompanyName,
+ ContactName
 FROM
-	(
-	SELECT
-		CustomerId,
-		ProductId,
-		ProductName,
-		MIN(OrderDate)
-	FROM
-		OrderDetail od
-	JOIN Product p ON
-		p.Id = od.ProductId
-	JOIN "Order" o ON
-		o.Id = od.OrderId
-	WHERE
-		p.Discontinued = 1
-	GROUP BY
-		ProductId ) t1
+ (
+ SELECT
+  CustomerId,
+  ProductId,
+  ProductName,
+  MIN(OrderDate)
+ FROM
+  OrderDetail od
+ JOIN Product p ON
+  p.Id = od.ProductId
+ JOIN "Order" o ON
+  o.Id = od.OrderId
+ WHERE
+  p.Discontinued = 1
+ GROUP BY
+  ProductId ) t1
 JOIN Customer c 
 ON
-	t1.CustomerId = c.Id 
+ t1.CustomerId = c.Id 
 ORDER BY ProductName;
 ```
+
 Result:
 ![Q5_img](1/Q5.png "Q5_result")
-
-
-
-
 
 ```sql
 --Q6 [10 POINTS] (Q6_ORDER_LAGS):
@@ -185,28 +180,25 @@ Result:
 SELECT Id,OrderDate,PreDate,ROUND(JULIANDAY(OrderDate) - JULIANDAY(PreDate),2) DiffOrderDate
 FROM
 (SELECT
-	o.Id Id,
-	OrderDate,
-	LAG(OrderDate,1,OrderDate)
-	OVER (
-		ORDER BY
-		OrderDate) PreDate
+ o.Id Id,
+ OrderDate,
+ LAG(OrderDate,1,OrderDate)
+ OVER (
+  ORDER BY
+  OrderDate) PreDate
 FROM
-	"Order" o
+ "Order" o
 JOIN Customer c ON
-	o.CustomerId = c.id
+ o.CustomerId = c.id
 WHERE
-	CustomerId = "BLONP"
+ CustomerId = "BLONP"
 ORDER BY
-	OrderDate ASC
+ OrderDate ASC
 LIMIT 10);
 ```
+
 Result:
 ![Q6_img](1/Q6.png "Q6_result")
-
-
-
-
 
 ```sql
 --Q7 [15 POINTS] (Q7_TOTAL_COST_QUARTILES):
@@ -222,29 +214,26 @@ Result:
 --the CompanyName is missing, override the NULL to 'MISSING_NAME' using IFNULL.
 
 WITH total_cost AS (
-	SELECT 
-		IFNULL(CompanyName, "MISSING_NAME") AS "CompanyName",
-		CustomerId, 
-		ROUND(SUM(UnitPrice * Quantity), 2) AS "TotalExpenditures"
-	FROM 'Order' o
-	INNER JOIN OrderDetail od ON o.Id = od.OrderId
-	LEFT JOIN Customer AS c ON o.CustomerId = c.Id
-	GROUP BY o.CustomerId
+ SELECT 
+  IFNULL(CompanyName, "MISSING_NAME") AS "CompanyName",
+  CustomerId, 
+  ROUND(SUM(UnitPrice * Quantity), 2) AS "TotalExpenditures"
+ FROM 'Order' o
+ INNER JOIN OrderDetail od ON o.Id = od.OrderId
+ LEFT JOIN Customer AS c ON o.CustomerId = c.Id
+ GROUP BY o.CustomerId
 ),
 divide_bucket AS (
-	SELECT *, NTILE(4) OVER(ORDER BY TotalExpenditures ASC) AS bucket_number
-	FROM total_cost
+ SELECT *, NTILE(4) OVER(ORDER BY TotalExpenditures ASC) AS bucket_number
+ FROM total_cost
 )
 SELECT CompanyName, CustomerId, TotalExpenditures
 FROM divide_bucket
 WHERE bucket_number = 1;
 ```
+
 Result:
 ![Q7_img](1/Q7.png "Q7_result")
-
-
-
-
 
 ```sql
 --Q8 [15 POINTS] (Q8_YOUNGBLOOD):
@@ -256,34 +245,31 @@ Result:
 WITH employee_info AS
 (
 SELECT
-	FirstName ,
-	LastName ,
-	MIN(BirthDate) MinBirthDate,
-	Id eId
+ FirstName ,
+ LastName ,
+ MIN(BirthDate) MinBirthDate,
+ Id eId
 FROM
-	Employee e
+ Employee e
 GROUP BY
-	Region
+ Region
 ORDER BY
-	Region ),
+ Region ),
 territory_info AS 
 (
-	SELECT * FROM EmployeeTerritory et  JOIN Territory t ON et.TerritoryId  = t.Id JOIN Employee e ON e.Id = et.EmployeeId 
+ SELECT * FROM EmployeeTerritory et  JOIN Territory t ON et.TerritoryId  = t.Id JOIN Employee e ON e.Id = et.EmployeeId 
 )
 SELECT
-	DISTINCT RegionDescription,ei.FirstName ,ei.LastName,MinBirthDate
+ DISTINCT RegionDescription,ei.FirstName ,ei.LastName,MinBirthDate
 FROM
-	territory_info ti
+ territory_info ti
 JOIN employee_info ei ON
-	ei.eId = ti.EmployeeId
+ ei.eId = ti.EmployeeId
 JOIN Region r ON ti.RegionId = r.Id ;
 ```
+
 Result:
 ![Q8_img](1/Q8.png "Q8_result")
-
-
-
-
 
 ```sql
 --Q9 [15 POINTS] (Q9_CHRISTMAS):
@@ -295,43 +281,46 @@ Result:
 --Hint: You might find Recursive CTEs useful.
 WITH OrderFullTable AS (
 SELECT
-	*
+ *
 FROM
-	OrderDetail od
+ OrderDetail od
 JOIN "Order" o ON
-	od.OrderId = o.Id
+ od.OrderId = o.Id
 JOIN Product p ON
-	od.ProductId = p.Id),
+ od.ProductId = p.Id),
 QueenOrder AS (
 SELECT
-	*
+ *
 FROM
-	OrderFulltable oft
+ OrderFulltable oft
 JOIN Customer c ON
-	oft.CustomerId = c.Id
+ oft.CustomerId = c.Id
 WHERE
-	c.CompanyName = "Queen Cozinha"
-	AND oft.OrderDate LIKE "2014-12-25%"),
+ c.CompanyName = "Queen Cozinha"
+ AND oft.OrderDate LIKE "2014-12-25%"),
 OrderedProductName AS
 (
 SELECT
-	ProductName
+ ProductName
 FROM
-	QueenOrder
+ QueenOrder
 ORDER BY
-	ProductId ASC
+ ProductId ASC
 )
 SELECT
-	GROUP_CONCAT(ProductName) ProductNameCatString
+ GROUP_CONCAT(ProductName) ProductNameCatString
 FROM
-	OrderedProductName;
+ OrderedProductName;
 ```
+
 Result:
 ![Q9_img](1/Q9.png "Q9_result")
+</details>
 
+<details>
+<summary>Homework2 details</summary>
+<h2>Homework2</h2>
+extendible_hash_test passed:  
 
-
-
-
-
-
+![extendible_hash_test_passed_img](2/images/extendible_hash_test_passed.png "extendible_hash_test_passed")
+</details>
