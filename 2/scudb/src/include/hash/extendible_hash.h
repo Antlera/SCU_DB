@@ -14,6 +14,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <mutex>
 #include "hash/hash_table.h"
 
 
@@ -26,7 +27,8 @@ public:
   {
     Bucket(int depth) : localDepth(depth){};
     int localDepth;
-    std::map<K, V> hashMap;// 即实际的hash表项，在扩容复制时，仍然指向同一个hash表项，因此可以直接复制，直至下一次达到数量限制则会重新扩容，调整两桶的hash表项
+    std::map<K, V> hashMap;// 即实际的h std::atomic requires a trivially copyable typeash表项，在扩容复制时，仍然指向同一个hash表项，因此可以直接复制，直至下一次达到数量限制则会重新扩容，调整两桶的hash表项
+    std::mutex bLatch;
   };
   
   // constructor
@@ -49,7 +51,8 @@ private:
   // add your own member variables here
   std::vector<std::shared_ptr<Bucket>> buckets;
   int globalDepth;  //  the length of low bits that the ex-hashtable cares about
-  size_t bucketFixedSize;  // the max amount of items one bucket can contain
+  const size_t bucketFixedSize;  // the max amount of items one bucket can contain
   int bucketNum; // counts of buckets
+  mutable std::mutex latch;
 };
 } // namespace scudb
