@@ -72,9 +72,10 @@ int ExtendibleHash<K, V>::GetNumBuckets() const {
 template <typename K, typename V>
 bool ExtendibleHash<K, V>::Find(const K &key, V &value) {
   int bIndex = getBucketIndex(key);
-  if(buckets[bIndex]->hashMap.find(key) != buckets[bIndex]->hashMap.end())
+  auto cur = buckets[bIndex];
+  if (cur->hashMap.find(key) != cur->hashMap.end())
   {
-    value = buckets[bIndex]->hashMap[key];
+    value = cur->hashMap[key];
     return true;
   }
   return false;
@@ -86,7 +87,16 @@ bool ExtendibleHash<K, V>::Find(const K &key, V &value) {
  */
 template <typename K, typename V>
 bool ExtendibleHash<K, V>::Remove(const K &key) {
-  return false;
+  int bIndex = getBucketIndex(key);
+  auto cur = buckets[bIndex];
+  if(cur->hashMap.find(key) == cur->hashMap.end())// 不在hash表内无法删除
+    return false;
+  else
+  {
+    cur->hashMap.erase(key);
+    return true;
+  }
+  
 }
 
 /*
