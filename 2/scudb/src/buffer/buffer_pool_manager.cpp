@@ -92,8 +92,18 @@ Page *BufferPoolManager::FetchPage(page_id_t page_id) {
  * dirty flag of this page
  */
 bool BufferPoolManager::UnpinPage(page_id_t page_id, bool is_dirty) {
-
-  return false;
+  std::lock_guard<std::mutex> lck(latch_);
+  Page *target = nullptr;
+  page_table_->Find(page_id, target);
+  if (target == nullptr)
+    return false;
+  target->is_dirty_ = true;
+  if (target->GetPinCount() <= 0)
+    return false;
+  target->pin_count_--;
+  if (target->pin_count_ == 0)
+    replacer_->Insert(target);
+  return true;
 }
 
 /*
