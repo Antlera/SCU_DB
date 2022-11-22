@@ -2,7 +2,8 @@
 
 <span><img src="https://img.shields.io/badge/-SCU-red?logo=github"></span>
 <span><img src="https://img.shields.io/badge/Database-Sqlite-blue?logo=sqlite"><span>
-<span><img src="https://img.shields.io/badge/Version-v0.0.1-green?logo=git"><span>
+<span><img src="https://img.shields.io/badge/Version-v0.1.3-green?logo=git"><span>
+<span><img src="https://img.shields.io/badge/Cmake-v2.8+-064f8d?logo=cmake&logoColor=critical"><span>
 <details>
 <summary>Homework1 details</summary>
 <h2>Homework1</h2>
@@ -319,8 +320,18 @@ Result:
 
 <details>
 <summary>Homework2 details</summary>
-<h2>Homework2</h2>
-extendible_hash_test passed:  
+
+## Homework2
+
+### extendible_hash_test passed
 
 ![extendible_hash_test_passed_img](2/images/extendible_hash_test_passed.png "extendible_hash_test_passed")
+
+### lru_replacer_test passed
+
+![lru_replacer_test_img](2/images/lru_replacer_test_passed.png "lru_replacer_test_passed")
+
+### buffer_pool_manager_test passed
+
+![buffer_pool_manager_test_img](2/images/buffer_pool_manager_test_passed.png "buffer_pool_manager_test_passed")
 </details>
