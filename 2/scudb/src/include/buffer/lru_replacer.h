@@ -9,28 +9,38 @@
 
 #pragma once
 
+// #include <memory>
+#include <unordered_map>
+#include <mutex>
+#include <list>
+#include <algorithm>
 #include "buffer/replacer.h"
 #include "hash/extendible_hash.h"
 
-namespace scudb {
+namespace scudb
+{
+  template <typename T>
+  class LRUReplacer : public Replacer<T>
+  {
+  public:
+    // do not change public interface
+    LRUReplacer();
 
-template <typename T> class LRUReplacer : public Replacer<T> {
-public:
-  // do not change public interface
-  LRUReplacer();
+    ~LRUReplacer();
 
-  ~LRUReplacer();
+    void Insert(const T &value);
 
-  void Insert(const T &value);
+    bool Victim(T &value);
 
-  bool Victim(T &value);
+    bool Erase(const T &value);
 
-  bool Erase(const T &value);
+    size_t Size();
 
-  size_t Size();
-
-private:
-  // add your member variables here
-};
+  private:
+    // add your member variables here
+    mutable std::mutex latch;                                      // 并发锁
+    std::list<T> lruList;                                          // 页面链表
+    std::unordered_map<T, typename std::list<T>::iterator> lruMap; // 页面hash表
+  };
 
 } // namespace scudb
