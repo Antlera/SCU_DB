@@ -134,7 +134,7 @@ void ExtendibleHash<K, V>::Insert(const K &key, const V &value) {
       typename map<K, V>::iterator it;
       for (it = cur->kmap.begin(); it != cur->kmap.end(); ) {
         if (HashKey(it->first) & mask) {
-          newBuc->kmap[it->first] = it->second;
+          newBuc->kmap[it->first] = it->second; //  将localDepth下一位上为0与为1的分开
           it = cur->kmap.erase(it);
         } else it++;
       }
