@@ -15,6 +15,14 @@ TEST(ExtendibleHashTest, MyTest){
     std::cout << "hash of 5  "<< test->HashKey(5) << std::endl;
     std::cout << "hash of 16464  " << test->HashKey(16464) << std::endl;
     std::cout << "hash of 1784  " << test->HashKey(1784) << std::endl;
+    std::cout << "hash of 5  "<< test->getBucketIndex(5) << std::endl;
+    std::cout << "hash of 16464  " << test->getBucketIndex(16464) << std::endl;
+    std::cout << "hash of 1784  " << test->getBucketIndex(1784) << std::endl;
+    EXPECT_EQ(0, test->getBucketIndex(5));
+    EXPECT_EQ(3, test->GetLocalDepth(1));
+    EXPECT_EQ(2, test->GetLocalDepth(2));
+    EXPECT_EQ(2, test->GetLocalDepth(3));
+    delete test;
 }
 
 
