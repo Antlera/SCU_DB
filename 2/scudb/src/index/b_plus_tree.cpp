@@ -8,6 +8,7 @@
 #include "common/logger.h"
 #include "common/rid.h"
 #include "index/b_plus_tree.h"
+#include "index/index_iterator.h"
 #include "page/header_page.h"
 
 namespace scudb {

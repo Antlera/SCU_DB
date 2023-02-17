@@ -21,7 +21,6 @@
 #include <cstdlib>
 #include <string>
 
-
 #include "buffer/buffer_pool_manager.h"
 #include "index/generic_key.h"
 
