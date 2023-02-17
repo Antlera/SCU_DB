@@ -15,16 +15,40 @@ class IndexIterator {
 public:
   // you may define your own constructor based on your member variables
   IndexIterator();
+  IndexIterator(B_PLUS_TREE_LEAF_PAGE_TYPE *leaf, int index, BufferPoolManager *bufferPoolManager);
   ~IndexIterator();
+  // 索引末端判断
+  bool isEnd(){
+    return leaf == nullptr;
+  }
 
-  bool isEnd();
-
-  const MappingType &operator*();
-
-  IndexIterator &operator++();
+  const MappingType &operator*(){
+    return leaf->GetItem(index);
+  }
+  //索引++
+  IndexIterator &operator++(){
+    index++;
+    if (index >= leaf->GetSize()) {
+      page_id_t next = leaf->GetNextPageId();
+      bufferPoolManager->FetchPage(leaf->GetPageId())->RUnlatch();
+      bufferPoolManager->UnpinPage(leaf->GetPageId(), false);
+      if (next == INVALID_PAGE_ID) {
+        leaf = nullptr;
+      } else {
+        Page *page = bufferPoolManager->FetchPage(next);
+        page->RLatch();
+        leaf = reinterpret_cast<B_PLUS_TREE_LEAF_PAGE_TYPE *>(page->GetData());
+        index = 0;
+      }
+    }
+    return *this;
+  }
 
 private:
   // add your own private member variables here
+  int index;
+  B_PLUS_TREE_LEAF_PAGE_TYPE *leaf;
+  BufferPoolManager *bufferPoolManager;
 };
 
 } // namespace scudb
