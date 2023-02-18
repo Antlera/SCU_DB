@@ -117,7 +117,7 @@ int B_PLUS_TREE_INTERNAL_PAGE_TYPE::InsertNodeAfter(
   int index = ValueIndex(old_value) + 1;
   IncreaseSize(1);
   int curSize = GetSize();
-  for (int i - curSize - 1; i > index;i --){
+  for (int i = curSize - 1; i > index;i --){
     array[i].first = array[i - 1].first;
     array[i].second = array[i - 1].second;
   }
@@ -139,7 +139,7 @@ void B_PLUS_TREE_INTERNAL_PAGE_TYPE::MoveHalfTo(
   int total = GetMaxSize() + 1;
   // 拷贝后半部分
   int copyIndex = (total) / 2;
-  page_id_t recipientPageId = recipient->GetPageId;
+  page_id_t recipientPageId = recipient->GetPageId();
   for (int i = copyIndex; i < total;i++){
     recipient->array[i - copyIndex].first = array[i].first;
     recipient->array[i - copyIndex].second = array[i].second;
@@ -275,7 +275,7 @@ INDEX_TEMPLATE_ARGUMENTS
 void B_PLUS_TREE_INTERNAL_PAGE_TYPE::CopyFirstFrom(
     const MappingType &pair, int parent_index,
     BufferPoolManager *buffer_pool_manager) {
-  memmove(array + 1, array, GetSize() * sizeof(MappingType));
+  memmove(array + 1, array, GetSize()*sizeof(MappingType));
   IncreaseSize(1);
   array[0] = pair;
   // 更新父子页page id
