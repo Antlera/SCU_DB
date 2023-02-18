@@ -36,7 +36,7 @@ void BPlusTreePage::SetMaxSize(int size) { max_size_ = size; }
  * Helper method to get min page size
  * Generally, min page size == max page size / 2
  */
-int BPlusTreePage::GetMinSize() const { return return max_size_ / 2; }
+int BPlusTreePage::GetMinSize() const { return max_size_ / 2; }
 
 /*
  * Helper methods to get/set parent page id
@@ -56,5 +56,20 @@ void BPlusTreePage::SetPageId(page_id_t page_id) { page_id_ = page_id; }
  * Helper methods to set lsn
  */
 void BPlusTreePage::SetLSN(lsn_t lsn) { lsn_ = lsn; }
+
+bool BPlusTreePage::IsSafe(OpType op)
+{
+    int size = GetSize();
+    if (op == OpType::INSERT)
+    {
+        return size < GetMaxSize();
+    }
+    int minSize = GetMinSize() + 1;
+    if (op == OpType::DELETE)
+    {
+        return (IsLeafPage()) ? size >= minSize : size > minSize;
+    }
+    assert(false); // invalid area
+}
 
 } // namespace scudb

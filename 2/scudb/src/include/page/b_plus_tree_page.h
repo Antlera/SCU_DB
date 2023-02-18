@@ -57,6 +57,7 @@ public:
 
   void SetLSN(lsn_t lsn = INVALID_LSN);
 
+  bool IsSafe(OpType op);
 private:
   // member variable, attributes that both internal and leaf page share
   IndexPageType page_type_;
