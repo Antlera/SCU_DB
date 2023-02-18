@@ -335,3 +335,26 @@ Result:
 
 ![buffer_pool_manager_test_img](2/images/buffer_pool_manager_test_passed.png "buffer_pool_manager_test_passed")
 </details>
+
+<details>
+<summary>Homework3 details</summary>
+
+## Homework3 - based on homework2
+
+### b_plus_tree_print_test_running
+
+![b_plus_tree_print_test_running_img](2/images/b_plus_tree_print_test_running.png "b_plus_tree_print_test_running")
+
+### b_plus_tree_print_test_insert&delete
+
+![b_plus_tree_print_test_insert&delete_img](2/images/b_plus_tree_print_test_insert&delete.png "b_plus_tree_print_test_insert&delete")
+
+### b_plus_tree_print_test_passed
+
+![b_plus_tree_print_test_passed_img](2/images/b_plus_tree_print_test_passed.png "b_plus_tree_print_test_passed")
+
+### b_plus_tree_test_passed
+
+![b_plus_tree_test_passed_img](2/images/b_plus_tree_test_passed.png "b_plus_tree_test_passed")
+
+</details>
